@@ -1,7 +1,7 @@
 <%-- 
     Document   : confirm
-    Created on : Jun 21, 2020, 10:56:55 AM
-    Author     : USER
+    Created on : Jan 13, 2021, 10:56:55 AM
+    Author     : AVITA
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -20,40 +20,44 @@
             <a class="btn btn-success" href="search">Go shopping</a>
             <c:set var="cart" value="${requestScope.CART}"/>
             <c:set var="mapTravelTour" value="${cart.travelTour}"/>
-        </div>
+
+            <c:set var="mapFood" value="${cart.food}"></c:set>
+            </div>
         <c:if test="${not empty cart}">
             <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th>No.</th>
-                        <th>TourName</th>
+                        <th>FoodName</th>
                         <th>Price</th>
-                        <th>FromDate</th>
-                        <th>ToDate</th>
-                        <th>ImageLink</th>
+                        <th>Category</th>
+                        <th>Description</th>
                         <th>Amount</th>
+                        <th>Image</th>
                         <th>Total</th>
                     </tr>
                 </thead>
                 <tbody>
                     <c:forEach var="item" items="${cart.items}" varStatus="counter" >
                         <tr>
-                            <c:set var="tourId" value="${item.key}"/>
+                            <c:set var="foodId" value="${item.key}"/>
                             <c:set var="amount" value="${item.value}"></c:set>
+                            <c:set var="foodDto" value="${mapFood.get(foodId)}" ></c:set>
                             <c:set var="travelTourDTO" value="${mapTravelTour.get(tourId)}" ></c:set>
-                            <td>${counter.count}</td>
-                            <td>${travelTourDTO.tourName}</td>
-                            <td>${cart.getPriceDisplay(tourId)}</td>
-                            <td>${travelTourDTO.fromDate}</td>
-                            <td>${travelTourDTO.toDate}</td>
-                            <td><img src="${travelTourDTO.imageLink}" width="150"/></td> 
-                            <td>${amount}</td>
-                            <td> ${cart.getPriceOfEachItemDisplay(tourId)} </td>
-                        </c:forEach>
+
+                                <td>${counter.count}</td>
+                            <td>${foodDto.foodname}</td>
+                            <td>${cart.getPriceDisplay(foodId)}</td>
+                            <td>${foodDto.getCategoryname(foodDto.categoriID)}</td>
+                            <td>${foodDto.description}</td>
+                            <td><input class="form-control" type="text" name="txtAmount" value="${amount}" /></td>
+                            <td><img src="${foodDto.imageLink}" width="150"/></td> 
+                            <td>${cart.getPriceOfEachItemDisplay(foodId)}</td>
+                        </tr>
+                    </c:forEach>
                     <tr>
-                        <td>Discount Percent: ${cart.discountPercent} (%)</td>
-                        <td>- ${cart.discountValueDisplay}</td>
-                        <td> Total Price: ${cart.totalPriceDisplay}</td>
+                        <td colspan="5"></td>
+                        <td>Total Price: ${cart.totalPriceDisplay}</td>
                         <td colspan="5"></td>
                     </tr>
                 </tbody>

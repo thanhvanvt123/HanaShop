@@ -1,7 +1,7 @@
 <%-- 
     Document   : viewCart
-    Created on : Jun 20, 2020, 1:11:04 PM
-    Author     : USER
+    Created on : Jan 13, 2021, 1:11:04 PM
+    Author     : AVITA
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -19,12 +19,13 @@
             <h1>Your Cart Includes</h1>
             <div class="form-row mb-2">
                 <div class="col-md-3">
-                    <a href="search" class="btn btn-primary">Add More Items To Cart</a>
+                    <a href="search.jsp" class="btn btn-primary">Add More Items To Cart</a>
                 </div>
             </div>
 
             <c:set var="cart" value="${sessionScope.CART}"></c:set>
-            <c:set var="mapTravelTour" value="${cart.travelTour}"></c:set>
+            <c:set var="mapFood" value="${cart.food}"></c:set>
+
             <c:set var="confirmError" value="${requestScope.CONFIRM_ERROR}"/>
             <c:if test="${not empty confirmError}">
                 <p class="alert alert-danger">
@@ -39,12 +40,12 @@
                     <thead>
                         <tr>
                             <th>No.</th>
-                            <th>TourName</th>
+                            <th>FoodName</th>
                             <th>Price</th>
-                            <th>FromDate</th>
-                            <th>ToDate</th>
-                            <th>ImageLink</th>
+                            <th>Category</th>
+                            <th>Description</th>
                             <th>Amount</th>
+                            <th>Image</th>
                             <th>Total</th>
                             <th>Update</th>
                             <th>Delete</th>
@@ -52,26 +53,28 @@
                     </thead>
                     <tbody>
                         <c:forEach var="item" items="${cart.items}" varStatus="counter" >
-                        <form action="updateTour" >
+                        <form action="DispatcherController">
                             <tr>
                                 <c:set var="foodId" value="${item.key}"/>
                                 <c:set var="amount" value="${item.value}"></c:set>
+                                <c:set var="foodDto" value="${mapFood.get(foodId)}" ></c:set>
                                 <c:set var="travelTourDTO" value="${mapTravelTour.get(tourId)}" ></c:set>
+
                                 <td>${counter.count}</td>
-                                <td>${travelTourDTO.tourName}</td>
-                                <td>${cart.getPriceDisplay(tourId)}</td>
-                                <td>${travelTourDTO.fromDate}</td>
-                                <td>${travelTourDTO.toDate}</td>
-                                <td><img src="${travelTourDTO.imageLink}" width="150"/></td> 
+                                <td>${foodDto.foodname}</td>
+                                <td>${cart.getPriceDisplay(foodId)}</td>
+                                <td>${foodDto.getCategoryname(foodDto.categoriID)}</td>
+                                <td>${foodDto.description}</td>
                                 <td><input class="form-control" type="text" name="txtAmount" value="${amount}" /></td>
-                                <td>${cart.getPriceOfEachItemDisplay(tourId)}</td>
+                                <td><img src="${foodDto.imageLink}" width="150"/></td> 
+                                <td>${cart.getPriceOfEachItemDisplay(foodId)}</td>
                                 <td>
-                                    <input type="hidden" name="txtTourId" value="${tourId}" />
-                                    <input class="btn btn-info" type="submit" value="Update" />
+                                    <input type="hidden" name="txtFoodId" value="${foodId}" />
+                                    <input class="btn btn-info" type="submit" name="btAction" value="Update Item" />
                                 </td>
                                 <td>
-                                    <c:url var="deleteUrl" value="deleteTour">
-                                        <c:param name="txtTourId" value="${tourId}"> </c:param>
+                                    <c:url var="deleteUrl" value="DispatcherController?btAction=DeleteItem">
+                                        <c:param name="txtFoodId" value="${foodId}"> </c:param>
                                     </c:url>
                                     <a class="btn btn-danger" href="${deleteUrl}" onclick="return confirm('Are you sure to remove item?');">Delete</a>
                                 </td>
@@ -80,12 +83,10 @@
                     </c:forEach>
                     <tr>
                         <td colspan="5"></td>
-                        <td> Discount Percent: ${cart.discountPercent} (%)</td>
-                        <td>- ${cart.discountValueDisplay}</td>
                         <td>Total Price: ${cart.totalPriceDisplay}</td>
-                        <td colspan="2">                    
+                        <td colspan="4">                    
                             <form action="confirm-booking" method="GET">
-                                <input class="btn btn-success" type="submit" value="Confirm Booking" onclick="return confirm('Are you sure to continue?');"/>         
+                                <input class="btn btn-success ml-5" type="submit" value="Confirm Booking" onclick="return confirm('Are you sure to continue?');"/>         
                             </form> 
                         </td>
                     </tr>
@@ -100,5 +101,5 @@
     <c:if test="${not empty cart}">
         <jsp:include page="footer.jsp"/>
     </c:if>
-    
+
 </html>

@@ -15,7 +15,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import javax.naming.NamingException;
-import trangcq.conn.MyConnection;
+import vanlt.conn.MyConnection;
 import vanlt.dtos.FoodDto;
 
 /**
@@ -111,6 +111,27 @@ public class FoodDAO implements Serializable {
         return countPage;
     }
 
+    public int countTotalFood() throws SQLException, NamingException {
+        int countPage = 0;
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        try {
+            String sql = "SELECT COUNT(foodId) as totalRows from Food F "
+                    + "   WHERE F.statusId = 1 "
+                    + "   AND F.createDate > ? ";
+
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            preStm.setTimestamp(1, now);
+            rs = preStm.executeQuery();
+            if (rs.next()) {
+                countPage = rs.getInt("totalRows");
+            }
+        } finally {
+            closeConnection();
+        }
+        return countPage;
+    }
+
     public List<FoodDto> searchFoodPaging(String foodname, int cate_id, float toPrice, float fromPrice) throws SQLException, NamingException {
         return searchFoodPaging(foodname, cate_id, toPrice, fromPrice, 1);
     }
@@ -183,6 +204,43 @@ public class FoodDAO implements Serializable {
         return result;
     }
 
+    public List<FoodDto> foodPaging(int pageNumber) throws SQLException, NamingException {
+        List<FoodDto> result = new ArrayList<>();
+        int pageSize = 5;
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        try {
+            String sql = "SELECT F.foodId, F.foodname , F.foodPrice , F.quantity, F.description, F.createDate , F.categoriId , F.imageLink\n"
+                    + "    From Food F "
+                    + "    WHERE F.statusId = 1 "
+                    + "    AND F.createDate > ? "
+                    + " ORDER BY foodId "
+                    + " OFFSET ? ROWS "
+                    + " FETCH NEXT ? ROWS ONLY";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            preStm.setTimestamp(1, now);
+            preStm.setInt(2, pageSize * (pageNumber - 1));
+            preStm.setInt(3, pageSize);
+            rs = preStm.executeQuery();
+            while (rs.next()) {
+                int foodId = rs.getInt("foodId");
+                String foodName = rs.getString("foodname");
+                float foodPrice = rs.getFloat("foodPrice");
+                int quantity = rs.getInt("quantity");
+                String des = rs.getString("description");
+                Date createDate = rs.getDate("createDate");
+                int cate_id = rs.getInt("categoriId");
+                String imageLink = rs.getString("imageLink");
+
+                FoodDto dto = new FoodDto(foodId, foodName, foodPrice, quantity, cate_id, createDate, des, imageLink);
+                result.add(dto);
+            }
+        } finally {
+            closeConnection();
+        }
+        return result;
+    }
+
     public FoodDto getFoodByID(int foodID) throws SQLException, NamingException {
         FoodDto result = null;
         try {
@@ -210,45 +268,17 @@ public class FoodDAO implements Serializable {
         }
         return result;
     }
-//
-//    public TravelTourDTO getTravelTourWithQuota(int tourId) throws SQLException, NamingException {
-//        TravelTourDTO result = null;
-//        try {
-//            String sql = "SELECT [TourName],[TourId],[FromDate],[ToDate],[Price],[Quota],[ImageLink] "
-//                    + "  FROM [dbo].[TravelTour] "
-//                    + "  Where TourId = ? ";
-//            conn = MyConnection.getMyConnection();
-//            preStm = conn.prepareStatement(sql);
-//            preStm.setInt(1, tourId);
-//            rs = preStm.executeQuery();
-//            if (rs.next()) {
-//                String tourName = rs.getString("TourName");
-//                Date fromDate = rs.getDate("FromDate");
-//                Date toDate = rs.getDate("ToDate");
-//                float price = rs.getFloat("Price");
-//                String imageLink = rs.getString("ImageLink");
-//                int quota = rs.getInt("Quota");
-//                result = new TravelTourDTO(tourName, imageLink, tourId, price, fromDate, toDate);
-//                result.setQuota(quota);
-//            }
-//        } finally {
-//            closeConnection();
-//        }
-//        return result;
-//    }
 
-    public int getTourQuota(int tourId) throws SQLException, NamingException {
+    public int getFoodQuantity(int foodID) throws SQLException, NamingException {
         int res = 0;
         try {
-            String sql = "SELECT Quota "
-                    + "  FROM [dbo].[TravelTour] "
-                    + "  Where TourId = ? ";
+            String sql = "SELECT quantity FROM Food Where foodId = ? ";
             conn = MyConnection.getMyConnection();
             preStm = conn.prepareStatement(sql);
-            preStm.setInt(1, tourId);
+            preStm.setInt(1, foodID);
             rs = preStm.executeQuery();
             if (rs.next()) {
-                res = rs.getInt("Quota");
+                res = rs.getInt("quantity");
             }
         } finally {
             closeConnection();
@@ -315,7 +345,7 @@ public class FoodDAO implements Serializable {
             preStm.setInt(8, dto.getUserId());
             preStm.setInt(9, dto.getFoodId());
             result = preStm.executeUpdate() > 0;
-        }finally {
+        } finally {
             closeConnection();
         }
         return result;

@@ -11,8 +11,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.naming.NamingException;
-import trangcq.conn.MyConnection;
-import trangcq.role.RoleDTO;
+import vanlt.conn.MyConnection;
+import vanlt.role.RoleDTO;
 
 import vanlt.dtos.RegistrationDTO;
 import vanlt.dtos.StatusDTO;

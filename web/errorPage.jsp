@@ -14,7 +14,8 @@
         <title>Error Page</title>
     </head>
     <body>
-    <h1 class="btn btn-danger mb-2"> Error Update</h1>
+        <jsp:include page="navbar.jsp"/>
+        <h1 class="btn btn-danger mb-2"> Error Update</h1>
 
-</body>
+    </body>
 </html>
