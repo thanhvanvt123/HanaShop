@@ -1,6 +1,6 @@
 <%-- 
-    Document   : admin
-    Created on : Jun 10, 2020, 7:45:36 PM
+    Document   : search
+    Created on : Jan 10, 2021, 7:45:36 PM
     Author     : AVITA
 --%>
 
@@ -15,39 +15,7 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     </head>
     <body>
-        <!--         nvar-->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">Hana Shop</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item active">
-                        <a class="nav-link btn btn-primary text-white" href="search.jsp">Search <span class="sr-only">(current)</span></a>
-                    </li>
-                </ul>
-                <div>
-                    <c:if test="${not empty sessionScope.USER}">
-                        <font color="red">Welcome, ${sessionScope.USER.name}</font>
-                        <a class="btn border btn-light" href="DispatcherController?btAction=LogOut">LogOut</a>
-                    </c:if>
-                    <c:if test="${sessionScope.USER.role.name == 'User'}">
-                        <a class="btn btn-info" href="view">View Cart</a>
-                    </c:if>
-                    <c:if test="${sessionScope.USER.role.name == 'Admin'}">
-                        <a class="btn-primary btn" href="#">Manager Foods</a>        
-                    </c:if>
-                    <c:if test="${sessionScope.USER.role.name == 'Admin'}">
-                        <a class="btn-primary btn" href="createFood.jsp">Create New Food</a>        
-                    </c:if>
-                    <c:if test="${empty sessionScope.USER}">
-                        <a class="btn btn-success" href="login.jsp">Login here!!!</a>
-                    </c:if>
-
-                </div>
-            </div>
-        </nav>
+        <jsp:include page="navbar.jsp"/>
         <c:set var="search" value="${requestScope.SEARCH_RESULT}"/>
         <div class="form-row">
             <div class="container border mt-3 bg-light p-3" style="max-width: 500px;margin-left: 70px "> 
@@ -85,7 +53,12 @@
                 <c:if test="${not empty search}">
                     <div class="form-row mt-3">
                         <div class="form-row">
-                            <p>   Page [ ${param.pageNum} ]: </p>
+                            <c:if test="${not empty param.pageNum}">
+                                <p>   Page  [ ${param.pageNum} ]: </p>
+                            </c:if>
+                            <c:if test="${empty param.pageNum}">
+                                <p>   Page  [ 1 ]: </p>
+                            </c:if>
                             <c:forEach begin="1" end="${requestScope.PAGENUMBER}" varStatus="counter" step="1">
                                 <form action="SearchServlet" method="POST">
                                     <input type="hidden" name="txtSearchName" value="${param.txtSearchName}" />
@@ -140,29 +113,12 @@
                                             <input type="hidden" name="txtSearchCategory" value="${param.txtSearchCategory}" />
                                             <input type="hidden" name="txtFromPrice" value="${param.txtFromPrice}" />
                                             <input type="hidden" name="txtToPrice" value="${param.txtToPrice}" />
-                                            <input type="hidden" name="pageNum" value="${param.page}" />
+                                            <input type="hidden" name="pageNum" value="${param.pageNum}" />
                                             <input class="btn btn-success" type="submit" name="btAction" value="Add To Cart"/>
                                         </form>
                                     </c:if>
-                                    <c:if test="${not empty sessionScope.USER || sessionScope.USER.role.name == 'Admin'}">
-                                        <form action="DispatcherController" method="POST">
-                                            <input type="hidden" name="foodId" value="${dto.foodId}" />
-                                            <input type="hidden" name="txtSearchName" value="${param.txtSearchName}" />
-                                            <input type="hidden" name="txtSearchCategory" value="${param.txtSearchCategory}" />
-                                            <input type="hidden" name="txtFromPrice" value="${param.txtFromPrice}" />
-                                            <input type="hidden" name="txtToPrice" value="${param.txtToPrice}" />
-                                            <input type="hidden" name="pageNum" value="${param.page}" />
-                                            <a class="btn btn-success" href="DispatcherController?btAction=Edit&ID=${dto.foodId}">Edit</a>
-                                            <c:url var="deleteUrl" value="DispatcherController?btAction=Delete">
-                                                <c:param name="ID" value="${dto.foodId}"> </c:param>
-                                                <c:param name="txtSearchName" value="${param.txtSearchName}"> </c:param>
-                                                <c:param name="txtSearchCategory" value="${param.txtSearchCategory}"> </c:param>
-                                                <c:param name="txtFromPrice" value="${param.txtFromPrice}"> </c:param>
-                                                <c:param name="txtToPrice" value="${param.txtToPrice}"> </c:param>
-                                                <c:param name="pageNum" value="${param.page}"> </c:param>
-                                            </c:url>
-                                            <a class="btn btn-danger" href="${deleteUrl}" onclick="return confirm('Are you sure to Delete Food?');">Delete</a>
-                                        </form>
+                                    <c:if test="${not empty sessionScope.USER && sessionScope.USER.role.name == 'Admin'}">
+                                            <a class="btn btn-success" href="DispatcherController?btAction=Manager"> Manager Foods</a>
                                     </c:if>
                                 </td>
                             </tr>
@@ -171,7 +127,12 @@
                 </table>
                 <c:if test="${not empty search}">
                     <div class="form-row">
-                        <p>   Page (${param.pageNum}) : </p>
+                        <c:if test="${not empty param.pageNum}">
+                            <p>   Page  [ ${param.pageNum} ]: </p>
+                        </c:if>
+                        <c:if test="${empty param.pageNum}">
+                            <p>   Page  [ 1 ]: </p>
+                        </c:if>
                         <c:forEach begin="1" end="${requestScope.PAGENUMBER}" varStatus="counter" step="1">
                             <form action="SearchServlet" method="POST">
                                 <input type="hidden" name="txtSearchName" value="${param.txtSearchName}" />

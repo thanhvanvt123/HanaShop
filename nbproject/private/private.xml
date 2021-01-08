@@ -3,7 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/C:/Users/AVITA/Desktop/Lab%20Web/LabWeb_1/src/java/vanlt/daos/FoodDAO.java</file>
+=======
+            <file>file:/C:/Users/Long/Desktop/LAB231/Lab01_HanaShop/src/java/vanlt/controller/HistoryDetailServlet.java</file>
+            <file>file:/C:/Users/Long/Desktop/LAB231/Lab01_HanaShop/web/historyDetail.jsp</file>
+            <file>file:/C:/Users/Long/Desktop/LAB231/Lab01_HanaShop/src/java/vanlt/bookingitem/BookingItemDTO.java</file>
+            <file>file:/C:/Users/Long/Desktop/LAB231/Lab01_HanaShop/web/view.jsp</file>
+            <file>file:/C:/Users/Long/Desktop/LAB231/Lab01_HanaShop/web/history.jsp</file>
+            <file>file:/C:/Users/Long/Desktop/LAB231/Lab01_HanaShop/src/java/vanlt/controller/DispatcherController.java</file>
+>>>>>>> 562d70f0ec96165dd9b3e8a40cf4b27d7cb179c8
         </group>
     </open-files>
 </project-private>

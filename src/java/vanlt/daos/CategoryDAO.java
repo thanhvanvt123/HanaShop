@@ -12,7 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.naming.NamingException;
-import trangcq.conn.MyConnection;
+import vanlt.conn.MyConnection;
 import vanlt.dtos.CategoryDto;
 
 /**

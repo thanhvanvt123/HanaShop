@@ -13,7 +13,7 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="container navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="#">Hana Shop</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -27,10 +27,16 @@
                 <div>
                     <c:if test="${not empty sessionScope.USER}">
                         <font color="red">Welcome, ${sessionScope.USER.name}</font>
-                        <a class="btn border btn-light" href="DispatcherController?btAction=LogOut">Logout</a>
+                        <a class="btn border btn-light" href="DispatcherController?btAction=LogOut">LogOut</a>
                     </c:if>
                     <c:if test="${sessionScope.USER.role.name == 'User'}">
-                        <a class="btn btn-info" href="view">View Cart</a>
+                        <a class="btn btn-info" href="DispatcherController?btAction=ViewCart">View Cart</a>
+                    </c:if>
+                    <c:if test="${sessionScope.USER.role.name == 'User'}">
+                        <a class="btn btn-info" href="DispatcherController?btAction=History">History</a>
+                    </c:if>
+                    <c:if test="${sessionScope.USER.role.name == 'Admin'}">
+                        <a class="btn-primary btn" href="DispatcherController?btAction=Manager">Manager Foods</a>        
                     </c:if>
                     <c:if test="${sessionScope.USER.role.name == 'Admin'}">
                         <a class="btn-primary btn" href="createFood.jsp">Create New Food</a>        

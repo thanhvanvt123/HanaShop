@@ -6,7 +6,7 @@
 package vanlt.dtos;
 
 import java.io.Serializable;
-import trangcq.role.RoleDTO;
+import vanlt.role.RoleDTO;
 
 /**
  *
