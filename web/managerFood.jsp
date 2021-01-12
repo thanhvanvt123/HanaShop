@@ -63,8 +63,14 @@
                                         </form>
                                     </c:if>
                                 </td>
+<!--                                <td>
+                                    <input type="checkbox" name="chkItem" value="${dto.foodId}"/>
+                                </td>-->
                             </tr>
                         </c:forEach>
+<!--                    <td>
+                        <input type="submit" value="Remove Selected Books" />
+                    </td>-->
                     </tbody>
                 </table>
                 <c:if test="${not empty products}">

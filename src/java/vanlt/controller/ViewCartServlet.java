@@ -7,27 +7,20 @@ package vanlt.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
-import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import vanlt.daos.CategoryDAO;
-import vanlt.daos.RegistrationDAO;
-import vanlt.dtos.RegistrationDTO;
 
 /**
  *
  * @author AVITA
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
-public class LoginServlet extends HttpServlet {
-
-    private final String URL_LOGINFAIL_PAGE = "login.jsp";
-    private final String URL_SEARCH_PAGE = "search.jsp";
+@WebServlet(name = "ViewCartServlet", urlPatterns = {"/ViewCartServlet"})
+public class ViewCartServlet extends HttpServlet {
+    private final String URL = "view.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -41,32 +34,15 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        String url = URL_LOGINFAIL_PAGE;
-        String username = request.getParameter("txtUsername");
-        String password = request.getParameter("txtPassword");
+        String url = URL;
         try {
-            String encryPassword = org.apache.commons.codec.digest.DigestUtils.sha256Hex(password);
-            if (username != null && password != null && username.trim().length() > 0 && password.trim().length() > 0) {
-                RegistrationDAO dao = new RegistrationDAO();
-                //RegistrationDTO result = dao.checkLogin(username, encryPassword);
-                RegistrationDTO result = dao.checkLogin(username, password);
-                HttpSession session = request.getSession();
-                if (result != null) {
-                    session.setAttribute("USER", result);                   
-                    url = URL_SEARCH_PAGE;
-                    CategoryDAO cateDao = new CategoryDAO();
-                    session.setAttribute("LISTCATE", cateDao.getAllCategory());
-                }else{
-                    request.setAttribute("LOGINFAIL", "Invalid Email or Password !!!");
-                }
+            HttpSession session = request.getSession();
+            if (session.getAttribute("CART") == null) {
+                session.removeAttribute("CART");
+                url = URL;
             }
-
-        } catch (SQLException ex) {
-           System.out.println("Error SQL Login: " + ex.getMessage());
-        } catch (NamingException ex) {
-            ex.printStackTrace();
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            response.sendRedirect(url);
             out.close();
         }
     }

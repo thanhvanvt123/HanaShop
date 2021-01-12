@@ -1,5 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
+ * To change this license header, choose Lic  ense Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -7,7 +7,11 @@ package vanlt.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.List;
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,19 +19,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import vanlt.daos.CategoryDAO;
-import vanlt.daos.RegistrationDAO;
+import vanlt.booking.BookingDAO;
+import vanlt.booking.BookingDTO;
 import vanlt.dtos.RegistrationDTO;
 
 /**
  *
  * @author AVITA
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "SearchHistoryServlet", urlPatterns = {"/SearchHistoryServlet"})
+public class SearchHistoryServlet extends HttpServlet {
 
-    private final String URL_LOGINFAIL_PAGE = "login.jsp";
-    private final String URL_SEARCH_PAGE = "search.jsp";
+    private final String VIEW_HISTORY = "history.jsp";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -41,28 +45,37 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        String url = URL_LOGINFAIL_PAGE;
-        String username = request.getParameter("txtUsername");
-        String password = request.getParameter("txtPassword");
+        String url = VIEW_HISTORY;
+        BookingDAO bookDao = new BookingDAO();
         try {
-            String encryPassword = org.apache.commons.codec.digest.DigestUtils.sha256Hex(password);
-            if (username != null && password != null && username.trim().length() > 0 && password.trim().length() > 0) {
-                RegistrationDAO dao = new RegistrationDAO();
-                //RegistrationDTO result = dao.checkLogin(username, encryPassword);
-                RegistrationDTO result = dao.checkLogin(username, password);
-                HttpSession session = request.getSession();
-                if (result != null) {
-                    session.setAttribute("USER", result);                   
-                    url = URL_SEARCH_PAGE;
-                    CategoryDAO cateDao = new CategoryDAO();
-                    session.setAttribute("LISTCATE", cateDao.getAllCategory());
-                }else{
-                    request.setAttribute("LOGINFAIL", "Invalid Email or Password !!!");
-                }
+            HttpSession session = request.getSession();
+            RegistrationDTO userDTO = (RegistrationDTO) session.getAttribute("USER");
+            String fromDate = request.getParameter("txtFromDate");
+            String toDate = request.getParameter("txtToDate");
+            Date fromdate = null;
+            Date todate = null;
+            List<BookingDTO> listSearch = null;
+            if (fromDate.length() < 0 || toDate.length() < 0 ){
+                listSearch = bookDao.allBookingUser(userDTO.getId());
+                request.setAttribute("ALLHISTORY", listSearch);
+                request.getRequestDispatcher(url).forward(request, response);
+                return;
             }
-
+            try {
+                long time = ((java.util.Date) new SimpleDateFormat("yyyy-MM-dd").parse(fromDate)).getTime();
+                fromdate = new Date(time);
+                long time2 = ((java.util.Date) new SimpleDateFormat("yyyy-MM-dd").parse(toDate)).getTime();
+                todate = new Date(time2);
+            } catch (ParseException ex) {
+                request.setAttribute("DATEERR", "Date Must be format (yyyy-MM-dd) !!");
+            }
+            if (fromDate.length() > 0 && toDate.length() > 0) {
+                listSearch = bookDao.searchHis(userDTO.getId(), fromdate, todate);
+                request.setAttribute("ALLHISTORY", listSearch);
+            }
+            
         } catch (SQLException ex) {
-           System.out.println("Error SQL Login: " + ex.getMessage());
+            System.out.println("Error SQL Search History : " + ex.getMessage());
         } catch (NamingException ex) {
             ex.printStackTrace();
         } finally {

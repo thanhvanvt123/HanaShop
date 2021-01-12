@@ -96,11 +96,9 @@ public class UpdateFoodServlet extends HttpServlet {
                     String uploadPath = request.getServletContext().getRealPath("/") + "img" + File.separator;
                     String fileName = Util.randomFileName(15);
                     String extension = Util.getFileExtension(fileItem.getName());
-                    System.out.println("đuôi của nó là : " + extension);
                     File fileUpload = new File(uploadPath + fileName + extension);
                     fileItem.write(fileUpload);
                     imageLink = "img/" + fileName + extension;
-                    System.out.println("cả cái hình ảnh tên là : " + imageLink);
                 } catch (Exception ex) {
                     errors.setImageErr("Failed to upload image!");
                 }
@@ -155,13 +153,13 @@ public class UpdateFoodServlet extends HttpServlet {
                     FoodDto dto = new FoodDto(Integer.parseInt(foodID), foodname, price, quantity, categoryId, description, imageUp, updateDate, userDto.getId());
                     boolean result = dao.updateFood(dto);
                     if (result) {
-                        url = "managerFood.jsp";
+                        url = "DispatcherController?btAction=Manager";
                     }
                 }
             }
 
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println("Error SQL UpdateFood: " + ex.getMessage());
         } catch (NamingException ex) {
             ex.printStackTrace();
         } catch (FileUploadException ex) {

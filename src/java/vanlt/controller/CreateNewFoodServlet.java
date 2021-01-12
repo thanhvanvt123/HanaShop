@@ -151,9 +151,9 @@ public class CreateNewFoodServlet extends HttpServlet {
             }
 
         } catch (SQLException ex) {
-            ex.printStackTrace();
+           System.out.println("Error SQL: " + ex.getMessage());
         } catch (NamingException ex) {
-            ex.printStackTrace();
+           System.out.println("Error SQL: " + ex.getMessage());
         } catch (FileUploadException ex) {
             ex.printStackTrace();
         } finally {

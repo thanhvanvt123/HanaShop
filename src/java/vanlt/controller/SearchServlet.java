@@ -90,7 +90,7 @@ public class SearchServlet extends HttpServlet {
                     int page = (int) (Math.ceil((double) numberFood / 5));
                     request.setAttribute("PAGENUMBER", page);
                     int pageIndex = 1;
-                    if (pageNum != null) {
+                    if (pageNum != null && !pageNum.equals("")){
                         pageIndex = Integer.parseInt(pageNum);
                     }
                     listFood = foodDao.searchFoodPaging(food_name, cate_id, toPrice, fromPrice, pageIndex);
@@ -100,7 +100,7 @@ public class SearchServlet extends HttpServlet {
                 }
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println("Error SQL Search Food: " + ex.getMessage());
         } catch (NamingException ex) {
             ex.printStackTrace();
         } finally {

@@ -1,5 +1,5 @@
 <%-- 
-    Document   : confirm
+    Document   : history
     Created on : Jan 17, 2021, 7:56:55 AM
     Author     : AVITA
 --%>
@@ -10,14 +10,32 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Confirm Page</title>
+        <title>History Page</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     </head>
     <body>
         <jsp:include page="navbar.jsp"/>
         <div class="container mt-3 border bg-light p-4 mb-5"  >
-            <a class="btn btn-success text-center" href="search.jsp">Go shopping</a>
-            <c:set var="historyList" value="${sessionScope.ALLHISTORY}"/>
+            <Form action="DispatcherController">
+                <div class="form-row" >          
+                    <div class="col-md-3" >
+                        <h1>Your History</h1>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                        <input placeholder="From Date" type="date" class="form-control" name="txtFromDate" value="${param.txtFromDate}" />     
+                    </div> 
+                    <div class="col-md-3 mt-3">
+                        <input placeholder="To Date" type="date" class="form-control" name="txtToDate" value="${param.txtToDate}" />        
+                    </div> 
+                    <div class="col-md-2 mt-3">
+                        <input class="col-md- btn btn-primary px-5" type="submit" name="btAction" value="Search History" />
+                    </div> 
+                        <c:if test="${not empty requestScope.DATEERR}">
+                            <input class="col-md-3" style="color: red; margin-left: 35%" value="${requestScope.DATEERR}">
+                        </c:if>
+                </div>
+            </Form>
+            <c:set var="historyList" value="${requestScope.ALLHISTORY}"/>
         </div>
         <c:if test="${not empty historyList}">
             <table class="container table table-bordered  p-4">
@@ -26,7 +44,7 @@
                         <th>Booking Code</th>
                         <th>DateBuy</th>
                         <th>Total</th>
-                        <th> </th>
+                        <th><a class="btn btn-success text-center" href="search.jsp">Let's Go shopping</a></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -47,7 +65,7 @@
             </table>
         </c:if>
         <c:if test="${empty historyList}">
-            <h5 class="alert alert-danger text-center">Not Has History!!!!!</h5>
+            <h5 class="container alert alert-danger text-center">Not Have History!!!!!</h5>
         </c:if>
     </body>
     <c:if test="${not empty historyList}">

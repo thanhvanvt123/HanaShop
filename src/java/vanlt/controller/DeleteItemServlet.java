@@ -21,7 +21,9 @@ import vanlt.cart.CartObject;
  */
 @WebServlet(name = "DeleteItemServlet", urlPatterns = {"/DeleteItemServlet"})
 public class DeleteItemServlet extends HttpServlet {
+
     private final String URL_VIEW_CART = "view.jsp";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -38,14 +40,12 @@ public class DeleteItemServlet extends HttpServlet {
         String txtFoodId = request.getParameter("txtFoodId");
         String url = URL_VIEW_CART;
         try {
-            HttpSession session = request.getSession(false);
-            if (session != null) {
-                CartObject cart = (CartObject) session.getAttribute("CART");
-                if (cart != null) {
-                    int foodId = Integer.parseInt(txtFoodId);
-                    cart.removeItemFromCart(foodId);
-                    session.setAttribute("CART", cart);
-                }         
+            HttpSession session = request.getSession();
+            CartObject cart = (CartObject) session.getAttribute("CART");
+            if (cart != null) {
+                int foodId = Integer.parseInt(txtFoodId);
+                cart.removeItemFromCart(foodId);
+                session.setAttribute("CART", cart);
             }
         } finally {
             response.sendRedirect(url);

@@ -16,16 +16,18 @@
     <body>
         <jsp:include page="navbar.jsp"/>
         <div class="container">
-            <h1>Your Cart Includes</h1>
-            <div class="form-row mb-2">
+            <c:set var="cart" value="${sessionScope.CART}"></c:set>
+            <c:if test="${not empty cart}">
+                <h1>Your Cart Includes</h1>
+            </c:if>
+
+            <div class="form-row mb-2 mt-3">
                 <div class="col-md-3">
                     <a href="search.jsp" class="btn btn-primary">Add More Items To Cart</a>
                 </div>
             </div>
-
-            <c:set var="cart" value="${sessionScope.CART}"></c:set>
+           
             <c:set var="mapFood" value="${cart.food}"></c:set>
-
             <c:set var="confirmError" value="${requestScope.CONFIRM_ERROR}"/>
             <c:if test="${not empty confirmError}">
                 <p class="alert alert-danger">
@@ -58,9 +60,8 @@
                                 <c:set var="foodId" value="${item.key}"/>
                                 <c:set var="amount" value="${item.value}"></c:set>
                                 <c:set var="foodDto" value="${mapFood.get(foodId)}" ></c:set>
-                                <c:set var="travelTourDTO" value="${mapTravelTour.get(tourId)}" ></c:set>
 
-                                <td>${counter.count}</td>
+                                    <td>${counter.count}</td>
                                 <td>${foodDto.foodname}</td>
                                 <td>${cart.getPriceDisplay(foodId)}</td>
                                 <td>${foodDto.getCategoryname(foodDto.categoriID)}</td>
@@ -85,8 +86,8 @@
                         <td colspan="5"></td>
                         <td>Total Price: ${cart.totalPriceDisplay}</td>
                         <td colspan="4">                    
-                            <form action="confirm-booking" method="GET">
-                                <input class="btn btn-success ml-5" type="submit" value="Confirm Booking" onclick="return confirm('Are you sure to continue?');"/>         
+                            <form action="DispatcherController" method="POST">
+                                <input class="btn btn-success ml-5" type="submit" name="btAction" value="Confirm Booking" onclick="return confirm('Are you sure to Confirm?');"/>         
                             </form> 
                         </td>
                     </tr>
@@ -94,7 +95,7 @@
                 </table>
             </c:if>
             <c:if test="${empty cart}">
-                <h2>Cart does not exist</h2>
+                <img class="container border rounded mt-3 mr-5 mb-4" src="img/empty-cart2.png" width="400" height="450" />
             </c:if>
         </div>
     </body>

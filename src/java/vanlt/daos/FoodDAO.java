@@ -64,11 +64,12 @@ public class FoodDAO implements Serializable {
     public int countTotalFood(String foodname, int categoriID, float toPrice, float fromPrice) throws SQLException, NamingException {
         int count = 2;
         int countPage = 0;
-        Timestamp now = new Timestamp(System.currentTimeMillis());
         try {
             String sql = "SELECT COUNT(foodId) as totalRows from Food F "
-                    + "   WHERE F.statusId = 1 "
-                    + "   AND F.createDate > ? ";
+                    + "   WHERE F.statusId = 1 and F.quantity > ? "
+                    + " And F.quantity > (SELECT Count(B.Amount) AS Amount "
+                    + " From BookingDetail B "
+                    + " Where B.FoodId = F.foodId) ";
             if (foodname != null) {
                 sql += "And F.foodname like ? ";
             }
@@ -83,7 +84,7 @@ public class FoodDAO implements Serializable {
             }
             conn = MyConnection.getMyConnection();
             preStm = conn.prepareStatement(sql);
-            preStm.setTimestamp(1, now);
+            preStm.setInt(1, 0);
             if (foodname != null) {
                 preStm.setString(count, "%" + foodname + "%");
                 count++;
@@ -113,15 +114,17 @@ public class FoodDAO implements Serializable {
 
     public int countTotalFood() throws SQLException, NamingException {
         int countPage = 0;
-        Timestamp now = new Timestamp(System.currentTimeMillis());
         try {
             String sql = "SELECT COUNT(foodId) as totalRows from Food F "
                     + "   WHERE F.statusId = 1 "
-                    + "   AND F.createDate > ? ";
+                    + "   AND F.quantity >  ? "
+                    + " And F.quantity > (SELECT Count(B.Amount) AS Amount "
+                    + " From BookingDetail B "
+                    + " Where B.FoodId = F.foodId) ";
 
             conn = MyConnection.getMyConnection();
             preStm = conn.prepareStatement(sql);
-            preStm.setTimestamp(1, now);
+            preStm.setInt(1, 0);
             rs = preStm.executeQuery();
             if (rs.next()) {
                 countPage = rs.getInt("totalRows");
@@ -140,12 +143,14 @@ public class FoodDAO implements Serializable {
         List<FoodDto> result = new ArrayList<>();
         int pageSize = 5;
         int count = 2;
-        Timestamp now = new Timestamp(System.currentTimeMillis());
         try {
             String sql = "SELECT F.foodId, F.foodname , F.foodPrice , F.quantity, F.description, F.createDate , F.categoriId , F.imageLink\n"
                     + "    From Food F "
                     + "    WHERE F.statusId = 1 "
-                    + "    AND F.createDate > ? ";
+                    + "    AND F.quantity >  ? "
+                    + " And F.quantity > (SELECT Count(B.Amount) AS Amount "
+                    + " From BookingDetail B "
+                    + " Where B.FoodId = F.foodId) ";
             if (foodname != null) {
                 sql += "And F.foodname like ? ";
             }
@@ -164,7 +169,7 @@ public class FoodDAO implements Serializable {
                     + "FETCH NEXT ? ROWS ONLY";
             conn = MyConnection.getMyConnection();
             preStm = conn.prepareStatement(sql);
-            preStm.setTimestamp(1, now);
+            preStm.setInt(1, 0);
 
             if (foodname != null) {
                 preStm.setString(count, "%" + foodname + "%");
@@ -207,18 +212,20 @@ public class FoodDAO implements Serializable {
     public List<FoodDto> foodPaging(int pageNumber) throws SQLException, NamingException {
         List<FoodDto> result = new ArrayList<>();
         int pageSize = 5;
-        Timestamp now = new Timestamp(System.currentTimeMillis());
         try {
             String sql = "SELECT F.foodId, F.foodname , F.foodPrice , F.quantity, F.description, F.createDate , F.categoriId , F.imageLink\n"
                     + "    From Food F "
                     + "    WHERE F.statusId = 1 "
-                    + "    AND F.createDate > ? "
+                    + "    AND F.quantity >  ? "
+                    + " And F.quantity > (SELECT Count(B.Amount) AS Amount "
+                    + " From BookingDetail B "
+                    + " Where B.FoodId = F.foodId) "
                     + " ORDER BY foodId "
                     + " OFFSET ? ROWS "
                     + " FETCH NEXT ? ROWS ONLY";
             conn = MyConnection.getMyConnection();
             preStm = conn.prepareStatement(sql);
-            preStm.setTimestamp(1, now);
+            preStm.setInt(1, 0);
             preStm.setInt(2, pageSize * (pageNumber - 1));
             preStm.setInt(3, pageSize);
             rs = preStm.executeQuery();

@@ -1,5 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
+ * To change this license header, choose Lic  ense Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -15,19 +15,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import vanlt.daos.CategoryDAO;
 import vanlt.daos.RegistrationDAO;
 import vanlt.dtos.RegistrationDTO;
+import vanlt.utilities.GoogleUtil;
 
 /**
  *
  * @author AVITA
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "LoginGoogleServlet", urlPatterns = {"/LoginGoogleServlet"})
+public class LoginGoogleServlet extends HttpServlet {
 
-    private final String URL_LOGINFAIL_PAGE = "login.jsp";
-    private final String URL_SEARCH_PAGE = "search.jsp";
+    private final String SEARCH_PAGE = "searh.jsp";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -41,32 +41,34 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        String url = URL_LOGINFAIL_PAGE;
-        String username = request.getParameter("txtUsername");
-        String password = request.getParameter("txtPassword");
+        String url = SEARCH_PAGE;
+        String code = null;
         try {
-            String encryPassword = org.apache.commons.codec.digest.DigestUtils.sha256Hex(password);
-            if (username != null && password != null && username.trim().length() > 0 && password.trim().length() > 0) {
-                RegistrationDAO dao = new RegistrationDAO();
-                //RegistrationDTO result = dao.checkLogin(username, encryPassword);
-                RegistrationDTO result = dao.checkLogin(username, password);
-                HttpSession session = request.getSession();
-                if (result != null) {
-                    session.setAttribute("USER", result);                   
-                    url = URL_SEARCH_PAGE;
-                    CategoryDAO cateDao = new CategoryDAO();
-                    session.setAttribute("LISTCATE", cateDao.getAllCategory());
-                }else{
-                    request.setAttribute("LOGINFAIL", "Invalid Email or Password !!!");
+            HttpSession session = request.getSession();
+            String accessToken = GoogleUtil.getToken(code); 
+            System.out.println("code_________________" + code);
+     
+            RegistrationDTO userDTO = GoogleUtil.getUserInfor(accessToken);
+            RegistrationDAO dao = new RegistrationDAO();
+            RegistrationDTO userLogin = dao.checkLoginWithGoogle(userDTO.getEmail()); 
+            if (userLogin == null) { 
+                int idInsert = dao.insertAccountWithGoogle(userDTO.getEmail(), userDTO.getFullname(), 3, 1, userDTO.getAvatar());
+                if (idInsert != -1) {
+                    userDTO.setId(idInsert);
+                    System.out.println("Da add xuong DB");
+                    session.setAttribute("USER", userDTO);
+                    url = SEARCH_PAGE;
                 }
+            } else {
+                session.setAttribute("USER", userLogin);
             }
-
         } catch (SQLException ex) {
-           System.out.println("Error SQL Login: " + ex.getMessage());
+            ex.printStackTrace();
+            System.out.println("Error SQL LoginWithGoogle : " + ex.getMessage());
         } catch (NamingException ex) {
             ex.printStackTrace();
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            response.sendRedirect(url);
             out.close();
         }
     }

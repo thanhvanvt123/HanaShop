@@ -7,6 +7,8 @@ package vanlt.bookingitem;
 
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.naming.NamingException;
 
 /**
@@ -16,6 +18,8 @@ import javax.naming.NamingException;
 public class BookingItemDTO implements Serializable {
 
     private int id, bookingId, foodId, amount;
+    private String foodName;
+    private String imageLink;
 
     public BookingItemDTO() {
     }
@@ -34,6 +38,8 @@ public class BookingItemDTO implements Serializable {
     }
 
     public BookingItemDTO(int foodId, int amount) {
+        this.foodName = getFoodName(foodId);
+        this.imageLink = getFoodImage(foodId);
         this.foodId = foodId;
         this.amount = amount;
     }
@@ -69,9 +75,43 @@ public class BookingItemDTO implements Serializable {
     public void setAmount(int amount) {
         this.amount = amount;
     }
-    public String getFoodName(int foodID) throws SQLException, NamingException{
-        System.out.println("giá trị nó nhận dc là : " + foodID);
-        return new BookingItemDAO().getFoodName(foodID);
+
+    public String getFoodName(int foodID) {
+        try {
+            return new BookingItemDAO().getFoodName(foodID);
+        } catch (SQLException ex) {
+            Logger.getLogger(BookingItemDTO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NamingException ex) {
+            Logger.getLogger(BookingItemDTO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public String getFoodImage(int foodID) {
+        try {
+            return new BookingItemDAO().getFoodImage(foodID);
+        } catch (SQLException ex) {
+            Logger.getLogger(BookingItemDTO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NamingException ex) {
+            Logger.getLogger(BookingItemDTO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public String getFoodName() {
+        return foodName;
+    }
+
+    public void setFoodName(String foodName) {
+        this.foodName = foodName;
+    }
+
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
     }
 
 }

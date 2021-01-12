@@ -5,39 +5,90 @@
  */
 package vanlt.dtos;
 
+import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
-import vanlt.role.RoleDTO;
+
 
 /**
  *
  * @author AVITA
  */
-public class RegistrationDTO implements Serializable{
-    private String username, password, name, facebookId, facebookLink;
-    private int id;
-    private StatusDTO status;
-    private RoleDTO role;
+public class RegistrationDTO implements Serializable {
 
+    
+    private transient int id;
+    private String email;
+    @SerializedName(value = "name")
+    private String fullname;
+    private String password, phone, address;
+    @SerializedName(value = "picture")
+    private String avatar;
+    private RoleDTO role;
+    private StatusDTO status;
 
     public RegistrationDTO() {
     }
 
+    public RegistrationDTO(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public RegistrationDTO(String email, String fullname) {
+        this.email = email;
+        this.fullname = fullname;
+    }
     
-    public RegistrationDTO(int id, String username, String password, String name, StatusDTO status, RoleDTO role) {
+
+    public RegistrationDTO(int id, String email, String password, String fullname, RoleDTO role, StatusDTO status) {
         this.id = id;
-        this.username = username;
+        this.email = email;
         this.password = password;
-        this.name = name;
-        this.status = status;
+        this.fullname = fullname;
         this.role = role;
+        this.status = status;
     }
 
-    public String getUsername() {
-        return username;
+    public RegistrationDTO(String email, String password, String fullname, String phone, String address) {
+        this.email = email;
+        this.password = password;
+        this.fullname = fullname;
+        this.phone = phone;
+        this.address = address;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public RegistrationDTO(int id, String email, String password, String fullname, String phone, String address, RoleDTO role, StatusDTO status) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.fullname = fullname;
+        this.phone = phone;
+        this.address = address;
+        this.role = role;
+        this.status = status;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -48,36 +99,28 @@ public class RegistrationDTO implements Serializable{
         this.password = password;
     }
 
-    public String getName() {
-        return name;
+    public String getFullname() {
+        return fullname;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
 
-    public String getFacebookId() {
-        return facebookId;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setFacebookId(String facebookId) {
-        this.facebookId = facebookId;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    public String getFacebookLink() {
-        return facebookLink;
+    public String getAddress() {
+        return address;
     }
 
-    public void setFacebookLink(String facebookLink) {
-        this.facebookLink = facebookLink;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public StatusDTO getStatus() {
@@ -95,14 +138,6 @@ public class RegistrationDTO implements Serializable{
     public void setRole(RoleDTO role) {
         this.role = role;
     }
-
     
 
-
-   
-
-    
-    
-    
-    
 }

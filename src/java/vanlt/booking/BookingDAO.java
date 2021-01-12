@@ -14,6 +14,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.naming.NamingException;
 import vanlt.conn.MyConnection;
 
@@ -68,8 +70,8 @@ public class BookingDAO implements Serializable {
         ArrayList<BookingDTO> list = new ArrayList<>();
         try {
             String sql = " select b.Id as MaDonHang, b.ImportedDate , b.Total  "
-                        + " from Booking b  "
-                        + " where b.UserId = ?";
+                    + " from Booking b  "
+                    + " where b.UserId = ?";
             conn = MyConnection.getMyConnection();
             preStm = conn.prepareStatement(sql);
 
@@ -79,7 +81,56 @@ public class BookingDAO implements Serializable {
                 int bookingID = rs.getInt("MaDonHang");
                 Timestamp importDate = rs.getTimestamp("ImportedDate");
                 float total = rs.getFloat("Total");
-                
+
+                list.add(new BookingDTO(bookingID, userID, importDate, total));
+            }
+        } finally {
+            closeConnection();
+        }
+        return list;
+    }
+
+    public BookingDTO getBooking(int bookingID) throws SQLException {
+        BookingDTO dto = new BookingDTO();
+        try {
+            String sql = " select  Id, ImportedDate , Total "
+                    + " from Booking where Id = ? ";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+
+            preStm.setInt(1, bookingID);
+            rs = preStm.executeQuery();
+            while (rs.next()) {
+                int bookingId = rs.getInt("Id");
+                Timestamp importDate = rs.getTimestamp("ImportedDate");
+                float total = rs.getFloat("Total");
+                dto = new BookingDTO(bookingId, importDate, total);
+            }
+        } catch (NamingException ex) {
+            ex.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+        return dto;
+    }
+
+    public List<BookingDTO> searchHis(int userID, Date fromDate,Date toDate) throws SQLException, NamingException {
+        ArrayList<BookingDTO> list = new ArrayList<>();
+        try {
+            String sql = " select b.Id as MaDonHang, b.ImportedDate , b.Total  "
+                    + "from Booking b  "
+                    + "where b.UserId = ? and b.ImportedDate > ? and b.ImportedDate <= ? ";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+
+            preStm.setInt(1, userID);
+            preStm.setDate(2, fromDate);
+            preStm.setDate(3, toDate);
+            rs = preStm.executeQuery();
+            while (rs.next()) {
+                int bookingID = rs.getInt("MaDonHang");
+                Timestamp importDate = rs.getTimestamp("ImportedDate");
+                float total = rs.getFloat("Total");
                 list.add(new BookingDTO(bookingID, userID, importDate, total));
             }
         } finally {

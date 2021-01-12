@@ -1,6 +1,6 @@
 <%-- 
-    Document   : confirm
-    Created on : Jan 17, 2021, 7:56:55 AM
+    Document   : historyDetail
+    Created on : Jan 15, 2021, 17:56:55 PM
     Author     : AVITA
 --%>
 
@@ -15,41 +15,40 @@
     </head>
     <body>
         <jsp:include page="navbar.jsp"/>
-        <div class="container mt-3 border bg-light p-4 mb-5"  >
-            <a class="btn btn-success text-center" href="search.jsp">Go shopping</a>
-            <c:set var="historyList" value="${sessionScope.ALLHISTORY}"/>
-            <c:set var="hisById" value="${sessionScope.DETAILBYID}"/>
+        <div class="container mt-3 border bg-light p-4 mb-2"  >
+            <div class="form-row">
+                <h2 style="text-align: center">History Detail  </h2>
+                <a class="btn btn-success text-center ml-4" href="search.jsp">  Go shopping</a>
+            </div>
         </div>
-        <c:if test="${not empty historyList}">
-            <table class="container table table-bordered  p-4">
+        <c:set var="hisById" value="${requestScope.DETAILBYID}"/> 
+        <c:set var="bookingDto" value="${requestScope.DTO}"/> 
+        <c:if test="${not empty hisById}">
+            <table class="container table table-bordered  p-3">
                 <thead>
                     <tr>
-                        <th>HistoryCode</th>
                         <th>DateBuy</th>
                         <th>Total</th>
                         <th>Food Name</th>
+                        <th>Image</th>
                         <th>Amount</th>>
                     </tr>
                 </thead>
                 <tbody>
-                    <c:forEach var="item" items="${historyList}" varStatus="counter" >
-                         <c:set var="foodId" value="${hisById.foodId}"/>
+                    <tr>
+                        <td rowspan="10">${bookingDto.importedDate}</td>
+                        <td rowspan="10">${bookingDto.total}</td>
+                    </tr>
+                    <c:forEach var="dto" items="${hisById}" varStatus="counter" >
                         <tr>
-                            <td>${item.id}</td>
-                            <td>${item.importedDate}</td>
-                            <td>${item.total}</td>
-                            <td>${hisById.getFoodName(foodId)}</td>
-                            <td>${hisById.amount}</td>                               
+                            <td>${dto.foodName}</td>
+                            <td><img class="border rounded" src="${dto.imageLink}" width="150" height="180"/></td>
+                            <td>${dto.amount}</td>     
                         </tr>
                     </c:forEach>
                 </tbody>
             </table>
         </c:if>
-        <c:if test="${empty historyList}">
-            <h5 class="alert alert-danger text-center">Not Have History!!!!!</h5>
-        </c:if>
     </body>
-    <c:if test="${not empty historyList}">
-        <jsp:include page="footer.jsp"/>
-    </c:if>
+    <jsp:include page="footer.jsp"/>
 </html>

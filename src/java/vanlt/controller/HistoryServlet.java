@@ -48,9 +48,9 @@ public class HistoryServlet extends HttpServlet {
             HttpSession session = request.getSession();
             RegistrationDTO userDTO = (RegistrationDTO) session.getAttribute("USER");
             List<BookingDTO> list = bookDao.allBookingUser(userDTO.getId());
-            session.setAttribute("ALLHISTORY", list);
+            request.setAttribute("ALLHISTORY", list);
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println("Error SQL History: " + ex.getMessage());
         } catch (NamingException ex) {
             ex.printStackTrace();
         } finally {

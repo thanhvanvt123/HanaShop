@@ -46,21 +46,20 @@ public class HistoryDetailServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         String url = VIEW_HISTORY_DETAIL;
         BookingItemDAO bookingItemDAO = new BookingItemDAO();
-        BookingDAO bookDao = new BookingDAO();
-        int bookingID= 1;
-
+        BookingDAO dao = new BookingDAO();
+        int bookingID = 0;
+        String booking_ID = request.getParameter("ID");
+        if(!booking_ID.equals("")){
+            bookingID = Integer.parseInt(request.getParameter("ID"));
+        }
 
         try {
-            HttpSession session = request.getSession();
-            RegistrationDTO userDTO = (RegistrationDTO) session.getAttribute("USER");
-            List<BookingDTO> list = bookDao.allBookingUser(userDTO.getId());
             List<BookingItemDTO> listDetail = bookingItemDAO.itemByBookingID(bookingID);
-            System.out.println("detail : " + listDetail.size());
-            
-            session.setAttribute("ALLHISTORY", list);
-            session.setAttribute("DETAILBYID", listDetail);
+            BookingDTO dto = dao.getBooking(bookingID);
+            request.setAttribute("DETAILBYID", listDetail);
+            request.setAttribute("DTO", dto);
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println("Error SQL HisDetail : " + ex.getMessage());
         } catch (NamingException ex) {
             ex.printStackTrace();
         } finally {

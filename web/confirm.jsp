@@ -16,15 +16,13 @@
     <body>
         <jsp:include page="navbar.jsp"/>
         <div class="container mt-3 border bg-light p-4" style="width: 500px" >
-            <font color="red">Thank you for booking tour travel! Your confirm has completed</font>
-            <a class="btn btn-success" href="search">Go shopping</a>
+            <font color="red">Thank you for Buy In Our Shop! Your confirm has completed</font>
+            <a class="btn btn-success" href="search.jsp">Go shopping</a>
             <c:set var="cart" value="${requestScope.CART}"/>
-            <c:set var="mapTravelTour" value="${cart.travelTour}"/>
-
             <c:set var="mapFood" value="${cart.food}"></c:set>
             </div>
-        <c:if test="${not empty cart}">
-            <table class="table table-bordered">
+        <c:if test="${not empty mapFood}">
+            <table class="container table table-bordered">
                 <thead>
                     <tr>
                         <th>No.</th>
@@ -43,14 +41,13 @@
                             <c:set var="foodId" value="${item.key}"/>
                             <c:set var="amount" value="${item.value}"></c:set>
                             <c:set var="foodDto" value="${mapFood.get(foodId)}" ></c:set>
-                            <c:set var="travelTourDTO" value="${mapTravelTour.get(tourId)}" ></c:set>
 
-                                <td>${counter.count}</td>
+                            <td>${counter.count}</td>
                             <td>${foodDto.foodname}</td>
                             <td>${cart.getPriceDisplay(foodId)}</td>
                             <td>${foodDto.getCategoryname(foodDto.categoriID)}</td>
                             <td>${foodDto.description}</td>
-                            <td><input class="form-control" type="text" name="txtAmount" value="${amount}" /></td>
+                            <td>${amount}</td>
                             <td><img src="${foodDto.imageLink}" width="150"/></td> 
                             <td>${cart.getPriceOfEachItemDisplay(foodId)}</td>
                         </tr>
@@ -58,7 +55,7 @@
                     <tr>
                         <td colspan="5"></td>
                         <td>Total Price: ${cart.totalPriceDisplay}</td>
-                        <td colspan="5"></td>
+                        <td colspan="2"></td>
                     </tr>
                 </tbody>
             </table>

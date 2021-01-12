@@ -15,7 +15,8 @@
     </head>
     <body>
         <jsp:include page="navbar.jsp"/>
-        <h1 class="btn btn-danger mb-2"> Error Update</h1>
+        <h1 class="container btn btn-danger mt-5 ml-5"> Error Update, Pood Has buying!!</h1>
+        <h1 class="container btn btn-success mt-5 ml-5"> <a href="DispatcherController?btAction=Manager"> Manager Foods </a></h1>
 
     </body>
 </html>

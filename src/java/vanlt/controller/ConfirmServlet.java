@@ -36,7 +36,6 @@ import vanlt.dtos.RegistrationDTO;
 @WebServlet(name = "ConfirmServlet", urlPatterns = {"/ConfirmServlet"})
 public class ConfirmServlet extends HttpServlet {
 
-    static org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(ConfirmServlet.class);
     private final String VIEW_CART = "view.jsp";
     private final String CONFIRM_CART = "confirm.jsp";
 
@@ -56,8 +55,8 @@ public class ConfirmServlet extends HttpServlet {
         String url = VIEW_CART;
         try {
             HttpSession session = request.getSession();
-            if (session != null) {
-                CartObject cart = (CartObject) session.getAttribute("CART");
+            CartObject cart = (CartObject) session.getAttribute("CART");
+            if (session != null && cart.getTotalPrice() != 0) {
                 RegistrationDTO userDTO = (RegistrationDTO) session.getAttribute("USER");
                 if (cart != null) {
                     Map<Integer, Integer> items = cart.getItems();
@@ -101,9 +100,9 @@ public class ConfirmServlet extends HttpServlet {
                 }
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println("Error SQL: " + ex.getMessage());
         } catch (NamingException ex) {
-            ex.printStackTrace();
+            System.out.println("Error SQL: " + ex.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
             out.close();

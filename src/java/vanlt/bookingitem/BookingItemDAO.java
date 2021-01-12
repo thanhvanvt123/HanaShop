@@ -10,11 +10,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import javax.naming.NamingException;
-import vanlt.booking.BookingDTO;
 import vanlt.conn.MyConnection;
 
 /**
@@ -43,7 +41,8 @@ public class BookingItemDAO implements Serializable {
     }
 
     public int countTotalBookedFood(int foodId) throws SQLException, NamingException {
-        String sql = "SELECT COUNT(b.Id) as TotalBooked FROM BookingDetail b WHERE b.FoodId = ? ";
+        //String sql = "SELECT COUNT(b.Id) as TotalBooked FROM BookingDetail b WHERE b.FoodId = ? ";
+        String sql = "SELECT SUM(b.Amount) as TotalBooked FROM BookingDetail b WHERE b.FoodId = ? ";
         int totalBooked = 0;
         try {
             conn = MyConnection.getMyConnection();
@@ -76,7 +75,7 @@ public class BookingItemDAO implements Serializable {
         return result;
     }
 
-    public List<BookingItemDTO> itemByBookingID(int bookingID) throws SQLException, NamingException { 
+    public List<BookingItemDTO> itemByBookingID(int bookingID) throws SQLException, NamingException {
         ArrayList<BookingItemDTO> list = new ArrayList<>();
         try {
             String sql = "  select b.FoodId , b.Amount as soLuong "
@@ -115,6 +114,23 @@ public class BookingItemDAO implements Serializable {
         }
         return foodName;
 
+    }
+
+    String getFoodImage(int foodId) throws SQLException, NamingException {
+        String foodName = null;
+        try {
+            String sql = " select imageLink from Food  where foodId = ?";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            preStm.setInt(1, foodId);
+            rs = preStm.executeQuery();
+            while (rs.next()) {
+                foodName = rs.getString("imageLink");
+            }
+        } finally {
+            closeConnection();
+        }
+        return foodName;
     }
 
 }

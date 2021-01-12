@@ -49,8 +49,6 @@ public class UpdateItemServlet extends HttpServlet {
 
         int foodId = Integer.parseInt(request.getParameter("txtFoodId"));
         int amount = Integer.parseInt(request.getParameter("txtAmount"));
-
-        System.out.println("foodID là : " + foodId + "và quantity : " + amount);
         try {
             HttpSession session = request.getSession();
             CartObject cart = (CartObject) session.getAttribute("CART");
@@ -71,7 +69,7 @@ public class UpdateItemServlet extends HttpServlet {
             }
 
         } catch (NamingException ex) {
-            ex.printStackTrace();
+            System.out.println("Error SQL Update Cart: " + ex.getMessage());
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {

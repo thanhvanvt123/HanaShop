@@ -26,7 +26,7 @@
                 </ul>
                 <div>
                     <c:if test="${not empty sessionScope.USER}">
-                        <font color="red">Welcome, ${sessionScope.USER.name}</font>
+                        <font color="red">Welcome, ${sessionScope.USER.fullname}</font>
                         <a class="btn border btn-light" href="DispatcherController?btAction=LogOut">LogOut</a>
                     </c:if>
                     <c:if test="${sessionScope.USER.role.name == 'User'}">

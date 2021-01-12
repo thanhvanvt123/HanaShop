@@ -41,19 +41,19 @@ public class EditFoodServlet extends HttpServlet {
         request.setCharacterEncoding("utf-8");
         response.setCharacterEncoding("utf-8");
         PrintWriter out = response.getWriter();
-        String url = VIEW_PAGE ;
+        String url = VIEW_PAGE;
         String foodId = request.getParameter("ID");
         try {
-            if(foodId != null){
+            if (foodId != null) {
                 FoodDAO dao = new FoodDAO();
                 FoodDto dto = dao.getFoodByID(Integer.parseInt(foodId));
                 request.setAttribute("FOODDTO", dto);
                 url = "editFood.jsp";
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println("Error SQL EditFood: " + ex.getMessage());
         } catch (NamingException ex) {
-            ex.printStackTrace();
+            System.out.println("Error SQL: " + ex.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
             out.close();

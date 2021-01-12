@@ -31,12 +31,15 @@ public class DispatcherController extends HttpServlet {
     private final String managerFoodServlet = "ManagerFoodServlet";
     private final String editFoodServlet = "EditFoodServlet";
     private final String addCart = "AddItemToCartServlet";
-    private final String viewCart = "view.jsp";
+    private final String viewCart = "ViewCartServlet";
     private final String deleteItemCart = "DeleteItemServlet";
     private final String updateItemCart = "UpdateItemServlet";
     private final String confirmCart = "ConfirmServlet";
     private final String historyServlet = "HistoryServlet";
     private final String historyDetailServlet = "HistoryDetailServlet";
+    private final String confirmServlet = "ConfirmServlet";
+    private final String searchHistoryServlet = "SearchHistoryServlet";
+    private final String loginGoogleServlet = "LoginGoogleServlet";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -88,13 +91,19 @@ public class DispatcherController extends HttpServlet {
             }else if(button.equals("History")){
                 url= historyServlet;
             }else if(button.equals("ViewDetail")){
-                url= historyDetailServlet;
+                url= historyDetailServlet;          
+            }else if(button.equals("Confirm Booking")){
+                url= confirmServlet;
+            }else if(button.equals("LoginWithGoogle")){
+                url= loginGoogleServlet;
+            }else if(button.equals("Search History")){
+                url= searchHistoryServlet;
             }
                     
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            log("Error Controller: " + ex.getMessage());
         } catch (NamingException ex) {
-            ex.printStackTrace();
+            log("Error Controller: " + ex.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
             out.close();

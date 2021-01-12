@@ -41,12 +41,7 @@ public class DeleteFoodServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-       
-        
-        String searchName = request.getParameter("txtSearchName");
-        String searchCate = request.getParameter("txtSearchCategory");
-        String searchFromPrice = request.getParameter("txtFromPrice");
-        String searchToPrice = request.getParameter("txtToPrice");
+
         String pageNum = request.getParameter("pageNum");
         String url = ErrorPage;
         
@@ -58,24 +53,17 @@ public class DeleteFoodServlet extends HttpServlet {
             String id = request.getParameter("ID");
             boolean result = dao.deleteFood(Integer.parseInt(id), dto.getId());
             if (result) {
-//                url = "DispatcherController"
-//                        + "?btAction=Search"
-//                        + "&txtSearchName=" + searchName
-//                        + "&txtSearchCategory="+ searchCate
-//                        + "&txtFromPrice="+ searchFromPrice
-//                        + "&txtToPrice=" + searchToPrice
-//                        + "&pageNum=" + pageNum;
                 session.setAttribute("LISTCATE", new CategoryDAO().getAllCategory());
-                
                 url = "DispatcherController?btAction=Manager&pageNum=" + pageNum;
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println("Can't delete Food : UserId Null, Login Agail  " + ex.getMessage());
         } catch (NamingException ex) {
-            ex.printStackTrace();
+           System.out.println("Can't delete Food : " + ex.getMessage());
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            response.sendRedirect(url);
             out.close();
+            
         }
     }
 
