@@ -89,9 +89,9 @@ public class AddItemToCartServlet extends HttpServlet {
                 session.setAttribute("CART", cart);
             }
         } catch (SQLException ex) {
-           System.out.println("Error SQL: " + ex.getMessage());
+           log("Error AddTocart SQL: " + ex.getMessage());
         } catch (NamingException ex) {
-           System.out.println("Error SQL: " + ex.getMessage());
+           log("Error AddTocart Naming: " + ex.getMessage());
         } finally {
             response.sendRedirect(url);
             out.close();

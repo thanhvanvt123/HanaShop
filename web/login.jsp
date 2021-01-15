@@ -32,7 +32,7 @@
                     <h2 class="text-danger">${error}</h2>
                 </div>
             </c:if>
-            <jsp:useBean id="google" class="vanlt.utilities.GoogleUtil"></jsp:useBean>
+            <jsp:useBean id="google" class="vanlt.acceptGoogle.GoogleUtils"></jsp:useBean>
             <a style="margin-left: 50%">Or</a> <br/>
             <a class="btn btn-primary mt-2" href="${google.redirect}" style="margin-left: 30%">
                 <i class="fa fa-google" aria-hidden="true"></i>

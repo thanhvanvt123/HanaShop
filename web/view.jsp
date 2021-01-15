@@ -26,7 +26,7 @@
                     <a href="search.jsp" class="btn btn-primary">Add More Items To Cart</a>
                 </div>
             </div>
-           
+
             <c:set var="mapFood" value="${cart.food}"></c:set>
             <c:set var="confirmError" value="${requestScope.CONFIRM_ERROR}"/>
             <c:if test="${not empty confirmError}">
@@ -87,7 +87,9 @@
                         <td>Total Price: ${cart.totalPriceDisplay}</td>
                         <td colspan="4">                    
                             <form action="DispatcherController" method="POST">
-                                <input class="btn btn-success ml-5" type="submit" name="btAction" value="Confirm Booking" onclick="return confirm('Are you sure to Confirm?');"/>         
+                                <div> 
+                                    <input class="btn btn-success ml-5" type="submit" name="btAction" value="Confirm Booking" onclick="return confirm('Are you sure to Confirm?');"/>       
+                                </div>
                             </form> 
                         </td>
                     </tr>

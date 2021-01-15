@@ -44,10 +44,10 @@ public class DeleteFoodServlet extends HttpServlet {
 
         String pageNum = request.getParameter("pageNum");
         String url = ErrorPage;
-        
+
         HttpSession session = request.getSession();
         RegistrationDTO dto = (RegistrationDTO) session.getAttribute("USER");
-         
+
         try {
             FoodDAO dao = new FoodDAO();
             String id = request.getParameter("ID");
@@ -57,13 +57,13 @@ public class DeleteFoodServlet extends HttpServlet {
                 url = "DispatcherController?btAction=Manager&pageNum=" + pageNum;
             }
         } catch (SQLException ex) {
-            System.out.println("Can't delete Food : UserId Null, Login Agail  " + ex.getMessage());
+            log("Error DelFood SQL: " + ex.getMessage());
         } catch (NamingException ex) {
-           System.out.println("Can't delete Food : " + ex.getMessage());
+            log("Error DelFood SQL: " + ex.getMessage());
         } finally {
             response.sendRedirect(url);
             out.close();
-            
+
         }
     }
 

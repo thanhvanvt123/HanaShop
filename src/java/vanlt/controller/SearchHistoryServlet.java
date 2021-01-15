@@ -75,9 +75,9 @@ public class SearchHistoryServlet extends HttpServlet {
             }
             
         } catch (SQLException ex) {
-            System.out.println("Error SQL Search History : " + ex.getMessage());
+            log("Error SearchHis SQL: " + ex.getMessage());
         } catch (NamingException ex) {
-            ex.printStackTrace();
+            log("Error SearchHis Naming: " + ex.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
             out.close();

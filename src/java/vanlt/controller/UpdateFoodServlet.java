@@ -159,9 +159,9 @@ public class UpdateFoodServlet extends HttpServlet {
             }
 
         } catch (SQLException ex) {
-            System.out.println("Error SQL UpdateFood: " + ex.getMessage());
+            log("Error UpdateFood SQL: " + ex.getMessage());
         } catch (NamingException ex) {
-            ex.printStackTrace();
+            log("Error UpdateFood Naming: " + ex.getMessage());
         } catch (FileUploadException ex) {
             ex.printStackTrace();
         } finally {

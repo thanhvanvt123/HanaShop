@@ -100,9 +100,9 @@ public class SearchServlet extends HttpServlet {
                 }
             }
         } catch (SQLException ex) {
-            System.out.println("Error SQL Search Food: " + ex.getMessage());
+            log("Error SearchFood SQL: " + ex.getMessage());
         } catch (NamingException ex) {
-            ex.printStackTrace();
+            log("Error SearchFood Naming: " + ex.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

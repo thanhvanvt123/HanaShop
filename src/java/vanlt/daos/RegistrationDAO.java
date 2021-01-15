@@ -71,8 +71,8 @@ public class RegistrationDAO implements Serializable {
         int id = -1;
         try {
             String sql = "INSERT INTO Registration (Email, Fullname, RoleID, StatusID, Avatar) "
-                    + "+ OUTPUT Inserted.ID "
-                    + "  VALUES (?, ?, ?, ?, ?, ? )";
+                    + " OUTPUT Inserted.ID "
+                    + " VALUES (?, ?, ?, ?, ?)";
             conn = MyConnection.getMyConnection();
             preStm = conn.prepareStatement(sql);
             preStm.setString(1, email);
@@ -94,17 +94,19 @@ public class RegistrationDAO implements Serializable {
     public RegistrationDTO checkLoginWithGoogle(String emailUser) throws SQLException, NamingException {
         RegistrationDTO result = null;
         try {
-            String sql = "SELECT Email,Fullname "
-                    + " FROM Registration  "
-                    + " WHERE Email = ? ";
+            String sql = "SELECT Re.ID , Email ,Password,Fullname,R.ID  AS RoleID, R.Name AS RoleName "
+                    + " FROM Registration  Re JOIN Role R ON Re.RoleID  = R.ID "
+                    + " WHERE Email = ?";
             conn = MyConnection.getMyConnection();
             preStm = conn.prepareStatement(sql);
             preStm.setString(1, emailUser);
             rs = preStm.executeQuery();
             if (rs.next()) {
-                String email = rs.getString("Email");
+                int id = rs.getInt("ID");
                 String fullname = rs.getString("Fullname");
-                result = new RegistrationDTO(email, fullname);
+                int roleID = rs.getInt("RoleID");
+                String roleName = rs.getString("RoleName");
+                result = new RegistrationDTO(id, emailUser, "null", fullname, new RoleDTO(roleID, roleName), new StatusDTO(1));
             }
         } finally {
             closeConnection();

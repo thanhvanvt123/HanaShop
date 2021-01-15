@@ -100,9 +100,9 @@ public class ConfirmServlet extends HttpServlet {
                 }
             }
         } catch (SQLException ex) {
-            System.out.println("Error SQL: " + ex.getMessage());
+            log("Error Confirm SQL: " + ex.getMessage());
         } catch (NamingException ex) {
-            System.out.println("Error SQL: " + ex.getMessage());
+            log("Error Naming: " + ex.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
             out.close();

@@ -69,9 +69,9 @@ public class UpdateItemServlet extends HttpServlet {
             }
 
         } catch (NamingException ex) {
-            System.out.println("Error SQL Update Cart: " + ex.getMessage());
+           log("Error UpdateCartItem Naming: " + ex.getMessage());
         } catch (SQLException ex) {
-            ex.printStackTrace();
+           log("Error UpdateCartItem SQL: " + ex.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
             out.close();

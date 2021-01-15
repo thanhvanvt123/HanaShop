@@ -31,7 +31,7 @@
                         <th>Total</th>
                         <th>Food Name</th>
                         <th>Image</th>
-                        <th>Amount</th>>
+                        <th>Amount</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -43,7 +43,7 @@
                         <tr>
                             <td>${dto.foodName}</td>
                             <td><img class="border rounded" src="${dto.imageLink}" width="150" height="180"/></td>
-                            <td>${dto.amount}</td>     
+                            <td>${dto.amount}</td>         
                         </tr>
                     </c:forEach>
                 </tbody>

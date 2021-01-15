@@ -17,6 +17,8 @@ public class BookingDTO implements Serializable {
     private int id, userId;
     private Timestamp importedDate;
     private float total;
+    private String payment;
+    
 
     public BookingDTO() {
     }
@@ -27,11 +29,12 @@ public class BookingDTO implements Serializable {
         this.total = total;
     }
 
-    public BookingDTO(int id, int userId, Timestamp importedDate, float total) {
+    public BookingDTO(int id, int userId, Timestamp importedDate, float total,String payment) {
         this.id = id;
         this.userId = userId;
         this.importedDate = importedDate;
         this.total = total;
+        this.payment = payment;
     }
 
     public BookingDTO(int userId, Timestamp importedDate) {
@@ -71,4 +74,12 @@ public class BookingDTO implements Serializable {
         this.total = total;
     }
 
+    public String getPayment() {
+        return payment;
+    }
+
+    public void setPayment(String payment) {
+        this.payment = payment;
+    }
+    
 }

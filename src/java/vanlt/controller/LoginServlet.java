@@ -28,6 +28,7 @@ public class LoginServlet extends HttpServlet {
 
     private final String URL_LOGINFAIL_PAGE = "login.jsp";
     private final String URL_SEARCH_PAGE = "search.jsp";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -52,19 +53,19 @@ public class LoginServlet extends HttpServlet {
                 RegistrationDTO result = dao.checkLogin(username, password);
                 HttpSession session = request.getSession();
                 if (result != null) {
-                    session.setAttribute("USER", result);                   
+                    session.setAttribute("USER", result);
                     url = URL_SEARCH_PAGE;
                     CategoryDAO cateDao = new CategoryDAO();
                     session.setAttribute("LISTCATE", cateDao.getAllCategory());
-                }else{
+                } else {
                     request.setAttribute("LOGINFAIL", "Invalid Email or Password !!!");
                 }
             }
 
         } catch (SQLException ex) {
-           System.out.println("Error SQL Login: " + ex.getMessage());
+            log("Error Login SQL: " + ex.getMessage());
         } catch (NamingException ex) {
-            ex.printStackTrace();
+            log("Error Login Naming: " + ex.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
             out.close();

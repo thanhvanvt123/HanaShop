@@ -51,9 +51,9 @@ public class EditFoodServlet extends HttpServlet {
                 url = "editFood.jsp";
             }
         } catch (SQLException ex) {
-            System.out.println("Error SQL EditFood: " + ex.getMessage());
+            log("Error EditFood SQL: " + ex.getMessage());
         } catch (NamingException ex) {
-            System.out.println("Error SQL: " + ex.getMessage());
+            log("Error EditFood Naming: " + ex.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
             out.close();

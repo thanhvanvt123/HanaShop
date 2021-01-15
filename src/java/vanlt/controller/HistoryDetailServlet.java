@@ -59,9 +59,9 @@ public class HistoryDetailServlet extends HttpServlet {
             request.setAttribute("DETAILBYID", listDetail);
             request.setAttribute("DTO", dto);
         } catch (SQLException ex) {
-            System.out.println("Error SQL HisDetail : " + ex.getMessage());
+            log("Error HisDetail SQL: " + ex.getMessage());
         } catch (NamingException ex) {
-            ex.printStackTrace();
+            log("Error HisDetail Naming: " + ex.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
             out.close();

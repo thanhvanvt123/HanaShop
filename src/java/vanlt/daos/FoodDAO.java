@@ -144,7 +144,7 @@ public class FoodDAO implements Serializable {
         int pageSize = 5;
         int count = 2;
         try {
-            String sql = "SELECT F.foodId, F.foodname , F.foodPrice , F.quantity, F.description, F.createDate , F.categoriId , F.imageLink\n"
+            String sql = "SELECT F.foodId, F.foodname , F.foodPrice , F.quantity, F.description, F.createDate , F.categoriId , F.imageLink "
                     + "    From Food F "
                     + "    WHERE F.statusId = 1 "
                     + "    AND F.quantity >  ? "

@@ -30,9 +30,9 @@
                     <div class="col-md-2 mt-3">
                         <input class="col-md- btn btn-primary px-5" type="submit" name="btAction" value="Search History" />
                     </div> 
-                        <c:if test="${not empty requestScope.DATEERR}">
-                            <input class="col-md-3" style="color: red; margin-left: 35%" value="${requestScope.DATEERR}">
-                        </c:if>
+                    <c:if test="${not empty requestScope.DATEERR}">
+                        <input class="col-md-3" style="color: red; margin-left: 35%" value="${requestScope.DATEERR}">
+                    </c:if>
                 </div>
             </Form>
             <c:set var="historyList" value="${requestScope.ALLHISTORY}"/>
@@ -44,6 +44,7 @@
                         <th>Booking Code</th>
                         <th>DateBuy</th>
                         <th>Total</th>
+                        <th>Payment</th>
                         <th><a class="btn btn-success text-center" href="search.jsp">Let's Go shopping</a></th>
                     </tr>
                 </thead>
@@ -53,6 +54,7 @@
                             <td>${item.id}</td>
                             <td>${item.importedDate}</td>
                             <td>${item.total}</td>
+                            <td>${item.payment}</td> 
                             <td>
                                 <c:url var="viewMore" value="DispatcherController?btAction=ViewDetail">
                                     <c:param name="ID" value="${item.id}"> </c:param>

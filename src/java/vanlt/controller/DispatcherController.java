@@ -39,7 +39,6 @@ public class DispatcherController extends HttpServlet {
     private final String historyDetailServlet = "HistoryDetailServlet";
     private final String confirmServlet = "ConfirmServlet";
     private final String searchHistoryServlet = "SearchHistoryServlet";
-    private final String loginGoogleServlet = "LoginGoogleServlet";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -57,7 +56,6 @@ public class DispatcherController extends HttpServlet {
         String button = request.getParameter("btAction");
         HttpSession session = request.getSession();
         String url = loginPage;
-        System.out.println("action lúc nay : " + button);
         try {
             if (button == null) {
                 session.setAttribute("LISTCATE", new CategoryDAO().getAllCategory());
@@ -94,8 +92,6 @@ public class DispatcherController extends HttpServlet {
                 url= historyDetailServlet;          
             }else if(button.equals("Confirm Booking")){
                 url= confirmServlet;
-            }else if(button.equals("LoginWithGoogle")){
-                url= loginGoogleServlet;
             }else if(button.equals("Search History")){
                 url= searchHistoryServlet;
             }

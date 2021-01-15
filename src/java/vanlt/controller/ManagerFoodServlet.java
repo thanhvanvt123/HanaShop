@@ -57,9 +57,9 @@ public class ManagerFoodServlet extends HttpServlet {
             listFood = foodDao.foodPaging(pageIndex);
             session.setAttribute("AllPRODUCT", listFood);
         } catch (SQLException ex) {
-            System.out.println("Error SQL ManagerFood : " + ex.getMessage());
+            log("Error ManagerFood SQL: " + ex.getMessage());
         } catch (NamingException ex) {
-            System.out.println("Error: " + ex.getMessage());
+            log("Error ManagerFood Naming: " + ex.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
