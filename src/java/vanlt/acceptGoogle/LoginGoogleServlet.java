@@ -13,6 +13,11 @@ import javax.servlet.http.HttpSession;
 import vanlt.daos.RegistrationDAO;
 import vanlt.dtos.RegistrationDTO;
 
+/**
+ *
+ * @author AVITA
+ */
+
 @WebServlet("/login-google")
 public class LoginGoogleServlet extends HttpServlet {
 

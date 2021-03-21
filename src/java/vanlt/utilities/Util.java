@@ -9,7 +9,7 @@ import java.util.Random;
 
 /**
  *
- * @author USER
+ * @author AVITA
  */
 public class Util {
 

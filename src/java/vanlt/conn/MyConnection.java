@@ -15,21 +15,15 @@ import javax.sql.DataSource;
 
 /**
  *
- * @author USER
+ * @author AVITA
  */
 public class MyConnection implements Serializable {
 
     public static Connection getMyConnection() throws SQLException, NamingException {
         Context context = new InitialContext();
         Context tomContext = (Context) context.lookup("java:comp/env");
-        DataSource ds = (DataSource) tomContext.lookup("SE1402");
+        DataSource ds = (DataSource) tomContext.lookup("SE1425");
         Connection conn = ds.getConnection();
-
-//        String dbURL = "jdbc:sqlserver://den1.mssql8.gear.host;databaseName=lab2database";
-//        String user = "lab2database";
-//        String pass = "Tl7NQ_55-Vr6";
-//        Connection conn = DriverManager.getConnection(dbURL, user, pass);
-
         return conn;
     }
 }

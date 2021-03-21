@@ -10,6 +10,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import vanlt.dtos.RegistrationDTO;
 
+/**
+ *
+ * @author AVITA
+ */ 
+
 public class GoogleUtils {
 
     public String getRedirect() {
